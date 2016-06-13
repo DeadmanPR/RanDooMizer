@@ -219,7 +219,7 @@ public class RanDooMizer {
 	 */
 	private void initializeLists(){
 		enemiesTID = new ArrayList<Integer>();
-		enemiesTID.add(3003);	//Baron of Hell
+		//enemiesTID.add(3003);	//Baron of Hell
 		enemiesTID.add(3005); 	//Cacodemon
 		//enemiesTID.add(16); 		//Cyberdemon
 		enemiesTID.add(3002);	//Pinky
@@ -281,17 +281,19 @@ public class RanDooMizer {
 				}
 				
 				else{
-					if(tid == 3003 && levelNumber == 8 || tid == 16 && levelNumber == 17 || tid == 7 && levelNumber == 26 )			//Baron of Hell in E1M8, Cyberdemon in E2M8 or Spider Mastermind in E3M8, these can't be changed (level will not end)
+					if(tid == 3003 && levelNumber == 8 || tid == 16 && levelNumber == 17 || tid == 7 && levelNumber == 26)			//Baron of Hell in E1M8, Cyberdemon in E2M8 or Spider Mastermind in E3M8, these can't be changed (level will not end)
 						return tid;
 				
 					int randomTID = randomNumberGenerator.nextInt(100);
 					if(seed == 666)
 						return 16;	//Hehe... 
 					
-					if(randomTID == 0)
-						return 7;	//Spider Mastermind (1/100 chance)
-					else if (randomTID == 1)
-						return 16; //Cyberdemon (1/100 chance)
+					if(randomTID == 0 && levelNumber != 26)
+						return 7;		//Spider Mastermind (1/100 chance)
+					else if (randomTID == 1 && levelNumber != 17)
+						return 16; 		//Cyberdemon (1/100 chance)
+					else if(randomTID >= 2 && randomTID <= 14 && levelNumber != 8)
+						return 3003;	//Baron of Hell
 					else
 						//Get any enemy
 						return enemiesTID.get(randomTID % enemiesTID.size());
