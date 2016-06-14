@@ -1,4 +1,5 @@
 import java.io.File;
+import java.security.InvalidParameterException;
 import java.util.Random;
 
 import javax.swing.JCheckBox;
@@ -64,7 +65,7 @@ public class MainGUI {
 			JCheckBox ammo = new JCheckBox("Ammunition");
 
 			Object[] params = {"Please select what things will be randomized.", enemies, weapons, powerups, ammo, baseGame};
-			
+
 			do{
 				int status = JOptionPane.showConfirmDialog(window, params, "RanDooMizer", JOptionPane.OK_CANCEL_OPTION);
 				if(status == JOptionPane.CANCEL_OPTION){ 	//User pressed cancel, program ends
@@ -77,7 +78,7 @@ public class MainGUI {
 				else
 					JOptionPane.showMessageDialog(window, "At least select something, will you?", "RanDooMizer", JOptionPane.ERROR_MESSAGE, null);
 			}while(!proceed);
-			
+
 			//If no seed was given, generate a random seed
 			if(!seedGiven){
 				Random rng = new Random();
@@ -85,15 +86,21 @@ public class MainGUI {
 			}
 
 			//Initialize the randomizer, and execute it
-			RanDooMizer randomizer = new RanDooMizer(wadFile, numSeed, enemies.isSelected(), weapons.isSelected(), powerups.isSelected(), ammo.isSelected());
 			int doomGame = 0;
 			String game = (String)baseGame.getSelectedItem();
 			if(game.equals("Doom"))
 				doomGame = 1;
 			else
 				doomGame = 2;
-			
-			randomizer.randomize(doomGame);
+
+			RanDooMizer randomizer = null;
+			try{
+				randomizer = new RanDooMizer(wadFile, doomGame, numSeed, enemies.isSelected(), weapons.isSelected(), powerups.isSelected(), ammo.isSelected());
+			}catch(InvalidParameterException e){
+				e.printStackTrace();;
+			}
+
+			randomizer.randomize();
 
 			//Lets the user know that the randomizer has finished
 			JOptionPane.showMessageDialog(window, "Finished! Have Fun!", "RanDooMizer", JOptionPane.INFORMATION_MESSAGE);

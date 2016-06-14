@@ -14,7 +14,7 @@ There is an executable file included in this project, named RanDooMizer.jar. Whe
 The output of this program is a .wad file which is a modified version of the .wad file you opened with the program. The file will have one of the following:
 
 - "Doom-" followed by some numbers (for example, "DooM-1234567.wad")
-- For Doom II, still to be decided. Probably similar to the one above.
+- For Doom II, "DooM2-" followed by some numbers (for example, "DooM2-1234567.wad")
 
 
 # Copyright Notes

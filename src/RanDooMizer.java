@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -21,12 +22,15 @@ public class RanDooMizer {
 	private ArrayList<Integer> powerupsTID;
 	private ArrayList<Integer> ammunitionTID;
 	private File wadFile;
+	private int doomGame;
 	private boolean enemiesRandomized, weaponsRandomized, powerupRandomized, ammoRandomized;
 	private Random randomNumberGenerator;
 	private long seed;
 	private static final long DOOM1_OFFSET = 112;
 	private static final long DOOM_MAPOFFSET = 176;
 	private static final long DOOM2_OFFSET = 96;
+	private static final int DOOM_NUMMAPS = 36;
+	private static final int DOOM2_NUMMAPS = 32;
 
 	/**
 	 * Constructor for the RanDooMizer.
@@ -37,8 +41,15 @@ public class RanDooMizer {
 	 * @param powerupRandomized true if the powerups are randomized, false otherwise
 	 * @param ammoRandomized true if the ammunition is randomized, false otherwise
 	 */
-	public RanDooMizer(File wadFile, long seed, boolean enemiesRandomized, boolean weaponsRandomized, boolean powerupRandomized, boolean ammoRandomized){
-		File newWad = new File(wadFile.getParent() + File.separator + "DooM-" + seed + ".wad");
+	public RanDooMizer(File wadFile, int doomGame, long seed, boolean enemiesRandomized, boolean weaponsRandomized, boolean powerupRandomized, boolean ammoRandomized) throws InvalidParameterException{
+		File newWad = null;
+		if(doomGame == 1)
+			newWad = new File(wadFile.getParent() + File.separator + "DooM-" + seed + ".wad");
+		else if(doomGame == 2)
+			newWad = new File(wadFile.getParent() + File.separator + "DooM2-" + seed + ".wad");
+		else
+			throw new InvalidParameterException("Invalid Doom Game");
+		
 		try {
 			copyFile(wadFile, newWad);
 		} catch (IOException e) {
@@ -48,6 +59,7 @@ public class RanDooMizer {
 		
 		//Set instance variables
 		this.wadFile = newWad;
+		this.doomGame = doomGame;
 		this.seed = seed;
 		this.enemiesRandomized = enemiesRandomized;
 		this.weaponsRandomized = weaponsRandomized;
@@ -64,7 +76,7 @@ public class RanDooMizer {
 	 * The "main" class of the randomizer. Interprets the .wad file structure to modify game data.
 	 * @param doomGame integer that represents what DooM game will the randomizer use as a base (1 for The Ultimate Doom, 2 for Doom II: Hell on Earth
 	 */
-	public void randomize(int doomGame){
+	public void randomize(){
 		//Let the randomizing begin!
 		try{
 
@@ -75,7 +87,10 @@ public class RanDooMizer {
 			byte[] byteBuff = new byte[4];
 
 			//Initialize data lists
-			initializeLists();
+			initializeDoomLists();
+			
+			if(doomGame == 2)
+				initializeDoom2Lists();
 
 			//Header decoding
 			raf.seek(4);
@@ -94,8 +109,13 @@ public class RanDooMizer {
 				currentOffset = (long)(directoryOffset + DOOM2_OFFSET);
 			
 
-
-			for(int i = 1 ; i <= 27 ; i++){
+			int numMaps = 0;
+			if(doomGame == 1)
+				numMaps = DOOM_NUMMAPS;
+			else if(doomGame == 2)
+				numMaps = DOOM2_NUMMAPS;
+			
+			for(int i = 1 ; i <= numMaps ; i++){
 				//Go to Map Data Lump
 				raf.seek(currentOffset+16);
 
@@ -217,7 +237,7 @@ public class RanDooMizer {
 	/**
 	 * Initializes the TID lists
 	 */
-	private void initializeLists(){
+	private void initializeDoomLists(){
 		enemiesTID = new ArrayList<Integer>();
 		//enemiesTID.add(3003);	//Baron of Hell
 		enemiesTID.add(3005); 	//Cacodemon
@@ -263,6 +283,24 @@ public class RanDooMizer {
 		ammunitionTID.add(2010);	//Rocket
 		ammunitionTID.add(2008);	//Shotgun Shells
 	}
+	
+	/**
+	 * Adds additional items and enemies exclusive to Doom 2 to the randomizer.
+	 */
+	private void initializeDoom2Lists(){
+		enemiesTID.add(68);			//Arachnotron
+		enemiesTID.add(64);			//Arch-Vile
+		enemiesTID.add(3003);			//Baron Of Hell
+		enemiesTID.add(65);			//Chaingunner
+		enemiesTID.add(72);			//Commander Keen
+		enemiesTID.add(69);			//Hell Knight
+		enemiesTID.add(67);			//Mancubus
+		enemiesTID.add(71);			//Pain Elemental
+		enemiesTID.add(66);			//Revenant
+		enemiesTID.add(84);			//Wolfenstein SS
+		
+		weaponsTID.add(82); 		//Super Shotgun
+	}
 
 	/**
 	 * Randomizes a THING contained inside the DooM WAD.
@@ -281,7 +319,7 @@ public class RanDooMizer {
 				}
 				
 				else{
-					if(tid == 3003 && levelNumber == 8 || tid == 16 && levelNumber == 17 || tid == 7 && levelNumber == 26)			//Baron of Hell in E1M8, Cyberdemon in E2M8 or Spider Mastermind in E3M8, these can't be changed (level will not end)
+					if((tid == 3003 && levelNumber == 8 || tid == 16 && levelNumber == 17 || tid == 7 && levelNumber == 26) && doomGame == 1)			//Baron of Hell in E1M8, Cyberdemon in E2M8 or Spider Mastermind in E3M8, these can't be changed (level will not end)
 						return tid;
 				
 					int randomTID = randomNumberGenerator.nextInt(100);
@@ -292,7 +330,7 @@ public class RanDooMizer {
 						return 7;		//Spider Mastermind (1/100 chance)
 					else if (randomTID == 1 && levelNumber != 17)
 						return 16; 		//Cyberdemon (1/100 chance)
-					else if(randomTID >= 2 && randomTID <= 14 && levelNumber != 8)
+					else if(randomTID >= 2 && randomTID <= 14 && levelNumber != 8 && doomGame == 1)
 						return 3003;	//Baron of Hell
 					else
 						//Get any enemy
