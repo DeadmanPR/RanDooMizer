@@ -22,7 +22,7 @@ public class RanDooMizer {
 	private ArrayList<Integer> powerupsTID;
 	private ArrayList<Integer> ammunitionTID;
 	private File wadFile;
-	private int doomGame;
+	private int doomGame, difficulty;
 	private boolean enemiesRandomized, weaponsRandomized, powerupRandomized, ammoRandomized;
 	private Random randomNumberGenerator;
 	private long seed;
@@ -37,31 +37,33 @@ public class RanDooMizer {
 	 * @param wadFile the WAD File to use as a base
 	 * @param seed the seed used for the random generator
 	 * @param enemiesRandomized true if the enemies will be randomized, false otherwise
+	 * @param difficulty If 0, Easy was selected. If 1, Medium was selected. If 2, Hard was selected
 	 * @param weaponsRandomized true if the weapons are randomized, false otherwise
 	 * @param powerupRandomized true if the powerups are randomized, false otherwise
 	 * @param ammoRandomized true if the ammunition is randomized, false otherwise
 	 */
-	public RanDooMizer(File wadFile, int doomGame, long seed, boolean enemiesRandomized, boolean weaponsRandomized, boolean powerupRandomized, boolean ammoRandomized) throws InvalidParameterException{
+	public RanDooMizer(File wadFile, int doomGame, long seed, boolean enemiesRandomized, int difficulty, boolean weaponsRandomized, boolean powerupRandomized, boolean ammoRandomized) throws InvalidParameterException{
 		File newWad = null;
 		if(doomGame == 1)
-			newWad = new File(wadFile.getParent() + File.separator + "DooM-" + seed + ".wad");
+			newWad = new File(wadFile.getParent() + File.separator + "Doom_" + seed + ".wad");
 		else if(doomGame == 2)
-			newWad = new File(wadFile.getParent() + File.separator + "DooM2-" + seed + ".wad");
+			newWad = new File(wadFile.getParent() + File.separator + "Doom2_" + seed + ".wad");
 		else
 			throw new InvalidParameterException("Invalid Doom Game");
-		
+
 		try {
 			copyFile(wadFile, newWad);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		//Set instance variables
 		this.wadFile = newWad;
 		this.doomGame = doomGame;
 		this.seed = seed;
 		this.enemiesRandomized = enemiesRandomized;
+		this.difficulty  = difficulty;
 		this.weaponsRandomized = weaponsRandomized;
 		this.powerupRandomized = powerupRandomized;
 		this.ammoRandomized = ammoRandomized;
@@ -88,7 +90,7 @@ public class RanDooMizer {
 
 			//Initialize data lists
 			initializeDoomLists();
-			
+
 			if(doomGame == 2)
 				initializeDoom2Lists();
 
@@ -97,7 +99,7 @@ public class RanDooMizer {
 			raf.read(byteBuff, 0, 4);
 			int numberOfEntries = getIntFromByteArray(byteBuff);
 
-			
+
 			raf.read(byteBuff, 0, 4);
 			int directoryOffset = getIntFromByteArray(byteBuff);
 
@@ -107,14 +109,14 @@ public class RanDooMizer {
 				currentOffset = (long)(directoryOffset + DOOM1_OFFSET);
 			else if(doomGame == 2)
 				currentOffset = (long)(directoryOffset + DOOM2_OFFSET);
-			
+
 
 			int numMaps = 0;
 			if(doomGame == 1)
 				numMaps = DOOM_NUMMAPS;
 			else if(doomGame == 2)
 				numMaps = DOOM2_NUMMAPS;
-			
+
 			for(int i = 1 ; i <= numMaps ; i++){
 				//Go to Map Data Lump
 				raf.seek(currentOffset+16);
@@ -148,7 +150,7 @@ public class RanDooMizer {
 					//Get the TID in decimal format and randomize it
 					int tidDec = getIntFromByteArray(tid);
 					int newTID = randomizeThing(tidDec, i);
-			
+
 					//If the TID was changed, proceed to write the new TID to the WAD File
 					if(newTID != tidDec){
 						//Backup the offset
@@ -210,7 +212,7 @@ public class RanDooMizer {
 
 		return btr;
 	}
-	
+
 	/**
 	 * Copies a file.
 	 * @param source the source file
@@ -218,20 +220,20 @@ public class RanDooMizer {
 	 * @throws IOException if an error occurred
 	 */
 	private static void copyFile(File source, File dest) throws IOException {
-	    InputStream input = null;
-	    OutputStream output = null;
-	    try {
-	        input = new FileInputStream(source);
-	        output = new FileOutputStream(dest);
-	        byte[] buffer = new byte[1024];
-	        int length;
-	        while ((length = input.read(buffer)) > 0) {
-	            output.write(buffer, 0, length);
-	        }
-	    } finally {
-	        input.close();
-	        output.close();
-	    }
+		InputStream input = null;
+		OutputStream output = null;
+		try {
+			input = new FileInputStream(source);
+			output = new FileOutputStream(dest);
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = input.read(buffer)) > 0) {
+				output.write(buffer, 0, length);
+			}
+		} finally {
+			input.close();
+			output.close();
+		}
 	}
 
 	/**
@@ -241,14 +243,12 @@ public class RanDooMizer {
 		enemiesTID = new ArrayList<Integer>();
 		//enemiesTID.add(3003);	//Baron of Hell
 		enemiesTID.add(3005); 	//Cacodemon
-		//enemiesTID.add(16); 		//Cyberdemon
 		enemiesTID.add(3002);	//Pinky
 		enemiesTID.add(3004);	//Former Human (Pistol)
 		enemiesTID.add(9);			//Former Human (Shotgun)
 		enemiesTID.add(3001);	//Imp
 		enemiesTID.add(3006);	//Lost Soul
 		enemiesTID.add(58);			//Spectre
-		//enemiesTID.add(7);			//Spider Mastermind
 
 		weaponsTID = new ArrayList<Integer>();
 		weaponsTID.add(2006);	//BFG9000
@@ -283,14 +283,14 @@ public class RanDooMizer {
 		ammunitionTID.add(2010);	//Rocket
 		ammunitionTID.add(2008);	//Shotgun Shells
 	}
-	
+
 	/**
 	 * Adds additional items and enemies exclusive to Doom 2 to the randomizer.
 	 */
 	private void initializeDoom2Lists(){
 		enemiesTID.add(68);			//Arachnotron
 		enemiesTID.add(64);			//Arch-Vile
-		enemiesTID.add(3003);			//Baron Of Hell
+		enemiesTID.add(3003);	//Baron of Hell
 		enemiesTID.add(65);			//Chaingunner
 		enemiesTID.add(72);			//Commander Keen
 		enemiesTID.add(69);			//Hell Knight
@@ -298,7 +298,7 @@ public class RanDooMizer {
 		enemiesTID.add(71);			//Pain Elemental
 		enemiesTID.add(66);			//Revenant
 		enemiesTID.add(84);			//Wolfenstein SS
-		
+
 		weaponsTID.add(82); 		//Super Shotgun
 	}
 
@@ -317,24 +317,173 @@ public class RanDooMizer {
 					randomNumberGenerator.nextInt(100);
 					return tid;
 				}
-				
+
 				else{
 					if((tid == 3003 && levelNumber == 8 || tid == 16 && levelNumber == 17 || tid == 7 && levelNumber == 26) && doomGame == 1)			//Baron of Hell in E1M8, Cyberdemon in E2M8 or Spider Mastermind in E3M8, these can't be changed (level will not end)
 						return tid;
-				
+
 					int randomTID = randomNumberGenerator.nextInt(100);
 					if(seed == 666)
 						return 16;	//Hehe... 
-					
-					if(randomTID == 0 && levelNumber != 26)
-						return 7;		//Spider Mastermind (1/100 chance)
-					else if (randomTID == 1 && levelNumber != 17)
-						return 16; 		//Cyberdemon (1/100 chance)
-					else if(randomTID >= 2 && randomTID <= 14 && levelNumber != 8 && doomGame == 1)
-						return 3003;	//Baron of Hell
-					else
-						//Get any enemy
-						return enemiesTID.get(randomTID % enemiesTID.size());
+
+					if(doomGame == 1){		//Doom
+						if(difficulty == 0){	//Easy Mode
+							if(randomTID >= 0 && randomTID <= 13)
+								return 3005;		//Cacodemon
+							else if(randomTID >= 14 && randomTID <= 27)
+								return 3002;		//Demon
+							else if(randomTID >= 28 && randomTID <= 41)
+								return 3004;		//Former Human Trooper
+							else if(randomTID >= 42 && randomTID <= 55)
+								return 9;				//Former Human Sergeant
+							else if(randomTID >= 56 && randomTID <= 69)
+								return 3001;		//Imp
+							else if(randomTID >= 70 && randomTID <= 83)
+								return 3006;		//Lost Soul
+							else if (randomTID >= 84 && randomTID <= 97)
+								return 58;			//Spectre
+							else
+								return enemiesTID.get(randomTID % enemiesTID.size());
+						}
+						else if(difficulty == 1){		//Medium Mode
+							if(randomTID >= 0 && randomTID <= 9)
+								return 3005;		//Cacodemon
+							else if(randomTID >= 10 && randomTID <= 19)
+								return 3002;		//Demon
+							else if(randomTID >= 20 && randomTID <= 29)
+								return 3004;		//Former Human Trooper
+							else if(randomTID >= 30 && randomTID <= 39)
+								return 9;				//Former Human Sergeant
+							else if(randomTID >= 40 && randomTID <= 49)
+								return 3001;		//Imp
+							else if(randomTID >= 50 && randomTID <= 59)
+								return 3006;		//Lost Soul
+							else if (randomTID >= 60 && randomTID <= 69)
+								return 58;			//Spectre
+							else if(randomTID >= 70 && randomTID <= 79)
+								if(doomGame == 1 && levelNumber ==8)
+									return tid;		//Doesn't add more Barons of Hell in E1M8
+								else
+									return 3003;		//Baron of Hell
+
+							else
+								return enemiesTID.get(randomTID % enemiesTID.size());
+						}
+						else{		//Hard Mode
+							if(randomTID >= 0 && randomTID <= 2)
+								if(doomGame == 1 && levelNumber == 26)
+									return tid;	//Same reason as Baron of Hell
+								else
+									return 7;		//Spider Mastermind
+
+							else if(randomTID >= 3 && randomTID <= 5)
+								if(doomGame == 1 && levelNumber == 17)
+									return tid;	//Same reason as Baron of Hell
+								else
+									return 16;		//Cyberdemon
+
+							else if(randomTID >= 70 && randomTID <= 79)
+								if(doomGame == 1 && levelNumber ==8)
+									return tid;		//Doesn't add more Barons of Hell in E1M8
+								else
+									return 3003;		//Baron of Hell
+
+							else
+								return enemiesTID.get(randomTID % enemiesTID.size());
+						}
+					}
+					else if(doomGame == 2){		//Doom 2
+						if(difficulty == 0){		//Easy Mode
+							//if(randomTID == 0)
+							//	return 68;		//Arachnotron
+							//else if(randomTID == 1)
+							//	return 64;		//Arch-Vile
+							//else if(randomTID == 2)
+							//	return 3003;		//Baron of Hell
+							if(randomTID >= 3 && randomTID <= 6)
+								return 3005;		//Cacodemon
+							else if(randomTID >= 7 && randomTID <= 10)
+								return 65;		//Chaingunner
+							else if(randomTID >= 11 && randomTID <= 20)
+								return 72;		//Commander Keen
+							//else if(randomTID == 21)
+							//	return 16;		//Cyberdemon
+							else if(randomTID >= 22 && randomTID <= 31)
+								return 3002;		//Demon
+							else if(randomTID >= 32 && randomTID <= 42)
+								return 3004;		//Former Human Trooper
+							else if(randomTID >= 43 && randomTID <= 53)
+								return 9;				//Former Human Sergeant
+							//else if(randomTID == 54)
+							//	return 69;			//Hell Knight
+							else if(randomTID >= 55 && randomTID <= 66)
+								return 3001;		//Imp
+							else if(randomTID >= 67 && randomTID <= 76)
+								return 3006;		//Lost Soul
+							//else if(randomTID == 77)
+							//	return 67;		//Mancubus
+							//else if(randomTID == 78)
+							//	return 71;		//Pain Elemental
+							//else if(randomTID == 79)
+							//	return 66;		//Revenant
+							else if(randomTID >= 80 && randomTID <= 89)
+								return 58;		//Spectre
+							//else if(randomTID == 90)
+							//	return 7;		//Spider Mastermind
+							else if(randomTID >= 91 && randomTID <= 99)
+								return 84;		//Wolfenstein SS
+							else
+								return enemiesTID.get(randomTID % enemiesTID.size());
+						}
+						else if(difficulty == 1){		//Medium Mode
+							//if(randomTID >= 0 && randomTID <= 2)
+							//	return 68;		//Arachnotron
+							//else if(randomTID >= 3 & randomTID <= 4)
+							//	return 64;		//Arch-Vile
+							//else if(randomTID >= 5 && randomTID <= 7)
+							//	return 3003;		//Baron of Hell
+							if(randomTID >= 8 && randomTID <= 14)
+								return 3005;		//Cacodemon
+							else if(randomTID >= 15 && randomTID <= 21)
+								return 65;		//Chaingunner
+							else if(randomTID >= 22 && randomTID <= 28)
+								return 72;		//Commander Keen
+							//else if(randomTID >= 29 && randomTID <= 30)
+							//	return 16;		//Cyberdemon
+							else if(randomTID >= 31 && randomTID <= 37)
+								return 3002;		//Demon
+							else if(randomTID >= 38 && randomTID <= 44)
+								return 3004;		//Former Human Trooper
+							else if(randomTID >= 45 && randomTID <= 51)
+								return 9;				//Former Human Sergeant
+							//else if(randomTID >= 52 && randomTID <= 54)
+							//	return 69;			//Hell Knight
+							else if(randomTID >= 55 && randomTID <= 61)
+								return 3001;		//Imp
+							else if(randomTID >= 62 && randomTID <= 68)
+								return 3006;		//Lost Soul
+							//else if(randomTID >= 69 && randomTID <= 70)
+							//	return 67;		//Mancubus
+							//else if(randomTID >= 71 && randomTID <= 73)
+							//	return 71;		//Pain Elemental
+							//else if(randomTID >= 74 && randomTID <= 75)
+							//	return 66;		//Revenant
+							else if(randomTID >= 76 && randomTID <= 82)
+								return 58;		//Spectre
+							//else if(randomTID >= 83 && randomTID <= 84)
+							//	return 7;		//Spider Mastermind
+							else if(randomTID >= 84 && randomTID <= 90)
+								return 84;		//Wolfenstein SS
+							else
+								return enemiesTID.get(randomTID % enemiesTID.size());
+
+						}
+						else{			//Hard Mode
+							enemiesTID.add(7);		//Spider Mastermind
+							enemiesTID.add(16);		//Cyberdemon
+							return enemiesTID.get(randomTID % enemiesTID.size());
+						}
+					}
 				}
 			}
 		}
@@ -361,7 +510,7 @@ public class RanDooMizer {
 					return tid;
 				}
 				else{
-					
+
 					int randomTID = randomNumberGenerator.nextInt(100);
 					if(randomTID >= 0 && randomTID <= 90)
 						return tid;
@@ -388,3 +537,5 @@ public class RanDooMizer {
 	}
 
 }
+
+

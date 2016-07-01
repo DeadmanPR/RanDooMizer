@@ -1,3 +1,5 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.security.InvalidParameterException;
 import java.util.Random;
@@ -64,7 +66,27 @@ public class MainGUI {
 			JCheckBox powerups = new JCheckBox("Chance of getting weapons in place of powerups (10% chance that a powerup is changed to a weapon)");
 			JCheckBox ammo = new JCheckBox("Ammunition");
 
-			Object[] params = {"Please select what things will be randomized.", enemies, weapons, powerups, ammo, baseGame};
+			String[] diff = {"Easy", "Medium", "Hard"};
+			JComboBox<String> difficulty = new JComboBox<>(diff);
+			difficulty.setEnabled(false);
+			
+			ActionListener diffEnabler = new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					JCheckBox obj = (JCheckBox)e.getSource();
+					if(obj.isSelected())
+						difficulty.setEnabled(true);
+					else
+						difficulty.setEnabled(false);
+				}
+				
+			};
+			
+			enemies.addActionListener(diffEnabler);
+			
+			Object[] params = {"Please select what things will be randomized", enemies, "Please select the difficulty", difficulty, "\n", weapons, powerups, ammo, "\nPlease select the base game", baseGame};
 
 			do{
 				int status = JOptionPane.showConfirmDialog(window, params, "RanDooMizer", JOptionPane.OK_CANCEL_OPTION);
@@ -86,16 +108,13 @@ public class MainGUI {
 			}
 
 			//Initialize the randomizer, and execute it
-			int doomGame = 0;
-			String game = (String)baseGame.getSelectedItem();
-			if(game.equals("Doom"))
-				doomGame = 1;
-			else
-				doomGame = 2;
+			int doomGame = baseGame.getSelectedIndex() + 1;
 
+			int difficultyInt = difficulty.getSelectedIndex();
+			
 			RanDooMizer randomizer = null;
 			try{
-				randomizer = new RanDooMizer(wadFile, doomGame, numSeed, enemies.isSelected(), weapons.isSelected(), powerups.isSelected(), ammo.isSelected());
+				randomizer = new RanDooMizer(wadFile, doomGame, numSeed, enemies.isSelected(), difficultyInt, weapons.isSelected(), powerups.isSelected(), ammo.isSelected());
 			}catch(InvalidParameterException e){
 				e.printStackTrace();;
 			}

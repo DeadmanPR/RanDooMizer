@@ -13,8 +13,10 @@ There is an executable file included in this project, named RanDooMizer.jar. Whe
 
 The output of this program is a .wad file which is a modified version of the .wad file you opened with the program. The file will have one of the following:
 
-- "Doom-" followed by some numbers (for example, "DooM-1234567.wad")
-- For Doom II, "DooM2-" followed by some numbers (for example, "DooM2-1234567.wad")
+- "Doom\_" followed by some numbers (for example, "Doom_1234567.wad")
+- For Doom II, "Doom2\_" followed by some numbers (for example, "DooM2_1234567.wad")
+
+These numbers correspond to the seed used for the randomization.
 
 
 # Copyright Notes
