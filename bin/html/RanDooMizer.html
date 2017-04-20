@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>RanDooMizer</title>
+        <link rel="stylesheet" type="text/css" href="../css/RanDooMizer.css">
+        <script src="../js/RanDooMizer-controller.js"></script>
+        <script src="../js/RanDooMizer.js"></script>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../vendor/font-awesome-4.7.0/css/font-awesome.min.css">
+
+        <!-- Random Number Generator -->
+        <script src="../vendor/seedrandom.js"></script>
+
+    </head>
+
+    <body>
+    <div id="page" style="min-width: 960px; margin: 0 auto;">
+       <div id="panel" class="img-rounded">
+           <h1 style="text-align:center">RanDooMizer</h1>
+           <br>
+
+           <p class="siteText" style="text-align:center;">Please select your Doom WAD file.</p>
+           <input id="file-upload" type="file" accept=".wad" style="display:block; margin:auto; width:190px;" onchange="fileSelected()">
+
+           <br>
+
+           <div id="options" style="display:none;">
+           <table class="table">
+               <tr> 
+                   <td style="max-width: 250px;">           
+                        <p class="optionsText">1) Select which things will be randomized.</p>
+                        <div class="checkbox">
+                            <label><input id="enemies" type="checkbox" name="Enemies" value="enemies" onchange="checkButtonStatus()"> <p style="display:inline;">Enemies</p></label> <br>
+                        </div>
+                        <div class="checkbox">
+                            <label><input id="weapons" type="checkbox" name="Weapons" value="weapons" onchange="checkButtonStatus()"> <p style="display:inline;">Weapons</p></label> <br>
+                        </div>
+                        <div class="checkbox">
+                            <label><input id="powerups" type="checkbox" name="Powerups" value="powerups" onchange="checkButtonStatus()"> <p style="display:inline;">Chance of getting weapons in place of powerups (10% chance that a powerup is changed to a weapon)</p></label> <br> 
+                        </div>
+                        <div class="checkbox">
+                            <label><input id="ammo" type="checkbox" name="Ammo" value="ammo" onchange="checkButtonStatus()"> <p style="display:inline;">Ammunition</p></label> <br>
+                        </div>
+                   </td>
+                   <td>
+                    <p class="optionsText">2) Select the difficulty.</p>
+                    <div class="radio">
+                            <label><input id="easy" type="radio" name="optradio" value="easy" onchange="checkButtonStatus()"> <p style="display:inline;">Easy</p></label> <br>
+                    </div>
+                    <div class="radio">
+                            <label><input id="medium" type="radio" name="optradio" value="medium" onchange="checkButtonStatus()"> <p style="display:inline;">Medium</p></label> <br>
+                    </div>
+                    <div class="radio">
+                            <label><input id="hard" type="radio" name="optradio" value="hard" onchange="checkButtonStatus()"> <p style="display:inline;">Hard</p></label> <br>
+                    </div>
+                   </td>
+               </tr>
+           </table>
+
+           <button id="randomize-button" class="btn" style="display:block; margin:auto; width:30%; height:40px; background-color:#58ae39; color:white;" disabled onclick="startRandomize()">RanDooMize!</button>
+
+           <br>
+           </div>
+        
+            <!-- Modal -->
+            <div id="seedConfirmation" class="modal fade" data-backdrop="static" data-keyboard="false" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Seed</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Would you prefer to use a seed for the randomization process?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal" data-target="#seedInput">Yes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"data-toggle="modal" data-target="#doomSelector">No</button>
+                </div>
+                </div>
+
+            </div>
+            </div>
+
+            <!-- Modal -->
+            <div id="seedInput" class="modal fade" data-backdrop="static" data-keyboard="false" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Seed</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Please enter the desired seed to use.</p>
+                    
+                    <div id="blank-seed-placeholder"></div>
+                    <div class="input-group margin-bottom-sm">
+                                    <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                                   <input id="seed" type="text" class="form-control" placeholder="Enter the seed here" autofocus/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" onclick="setSeed()">Done</button>
+                </div>
+                </div>
+
+            </div>
+            </div>
+
+
+            <!-- Modal -->
+            <div id="doomSelector" class="modal fade" data-backdrop="static" data-keyboard="false" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">WAD selection</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Which Doom WAD is this?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="setDoomVersion('1')">Doom</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="setDoomVersion('2')">Doom II: Hell on Earth</button>
+                </div>
+                </div>
+
+            </div>
+            </div>
+
+       </div>
+    </div>
+
+     <i id="loading-spinner" class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+     <h4 id="loading-spinner-text"><strong>Ordering monsters around...</strong></h4>
+    </body>
+</html>
