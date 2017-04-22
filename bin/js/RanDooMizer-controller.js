@@ -9,13 +9,25 @@ function fileSelected(){
     //When the file is loaded, ask for seed and disable the "Choose File" button
     reader.onloadend = function(event){
         wadFile = (event.target.result);
-        $("#seedConfirmation").modal();
+        if(doomVersion !== undefined)
+            $("#seedConfirmation").modal();
         document.getElementById("file-upload").disabled = true;
         document.getElementById("options").style.display = 'block';
     }
 
     //Get the file selected
     var wad = document.getElementById("file-upload").files[0];
+    var wadFilename = document.getElementById("file-upload").files[0].name;
+    if(wadFilename.toLowerCase() === "doom1.wad")
+        doomVersion = 1;
+    else if(wadFilename.toLowerCase() === "doom2.wad")
+        doomVersion = 2;
+    
+    else{
+        console.log('Doom version not detected');
+         $('#doomSelector').modal();
+    }
+    
     
     //Read the file as binary
     reader.readAsArrayBuffer(wad);
@@ -40,7 +52,6 @@ function setSeed(){
     else{
         document.getElementById("blank-seed-placeholder").innerHTML = "";
         $("#seedInput").modal("hide");
-        $('#doomSelector').modal();
     }
 
    

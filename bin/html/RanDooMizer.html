@@ -86,7 +86,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal" data-target="#seedInput">Yes</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal"data-toggle="modal" data-target="#doomSelector">No</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"data-toggle="modal">No</button>
                 </div>
                 </div>
 
@@ -130,11 +130,11 @@
                     <h4 class="modal-title">WAD selection</h4>
                 </div>
                 <div class="modal-body">
-                    <p>Which Doom WAD is this?</p>
+                    <p>Doom version could not be detected from the filename. Which Doom version is this?</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="setDoomVersion('1')">Doom</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="setDoomVersion('2')">Doom II: Hell on Earth</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="setDoomVersion('1')" data-toggle="modal" data-target="#seedConfirmation">Doom</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="setDoomVersion('2')" data-toggle="modal" data-target="#seedConfirmation">Doom II: Hell on Earth</button>
                 </div>
                 </div>
 

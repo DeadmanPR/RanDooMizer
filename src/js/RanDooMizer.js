@@ -230,11 +230,11 @@ function initializeDoomLists(){
 	weaponsTID.push(2001);	//Shotgun
 
 	
-	//powerupsTID.push(8);		//Backpack
+	powerupsTID.push(8);		//Backpack
 	powerupsTID.push(2019);	//Blue Armor
 	powerupsTID.push(2018);	//Green Armor
 	powerupsTID.push(2012);	//Medikit
-	//powerupsTID.push(2025);	//Radiation Suit
+	powerupsTID.push(2025);	//Radiation Suit
 	powerupsTID.push(2011);	//Stimpack
 	//powerupsTID.push(2023);	//Berserk
 	powerupsTID.push(2014);	//Health Potion

@@ -1,6 +1,10 @@
 var wadFile = new Array();
 var seed;
 var doomVersion;
+var enemiesRandomized = false;
+var weaponsRandomized = false;
+var ammoRandomized = false;
+var ammoRandomized = false;
 
 function fileSelected(){
     //File Reader instance
@@ -12,7 +16,7 @@ function fileSelected(){
         if(doomVersion !== undefined)
             $("#seedConfirmation").modal();
         document.getElementById("file-upload").disabled = true;
-        document.getElementById("options").style.display = 'block';
+    
     }
 
     //Get the file selected
@@ -63,13 +67,75 @@ function setDoomVersion(version){
 
 function checkButtonStatus(){
     if((document.getElementById("enemies").checked || document.getElementById("weapons").checked ||
-        document.getElementById("powerups").checked || document.getElementById("ammo").checked) &&
-        (document.getElementById("easy").checked || document.getElementById("medium").checked ||
-        document.getElementById("hard").checked))
+        document.getElementById("powerups").checked || document.getElementById("ammo").checked))
             document.getElementById("randomize-button").disabled = false;
 
     else
             document.getElementById("randomize-button").disabled = true;
+}
+
+function toggleEnemiesCheck(){
+    enemiesRandomized = !enemiesRandomized;
+
+    var enemies =  document.getElementsByClassName("enemy-item");
+    if(enemiesRandomized){
+        for(var i = 0 ;i < enemies.length; i++)
+            enemies[i].disabled = false; 
+    }
+    else{
+        for(var i = 0 ;i < enemies.length; i++)
+            enemies[i].disabled = true; 
+    }
+
+    checkButtonStatus();
+}
+
+function toggleWeaponsCheck(){
+    weaponsRandomized = !weaponsRandomized;
+
+    var weapons =  document.getElementsByClassName("weapon-item");
+    if(weaponsRandomized){
+        for(var i = 0 ;i < weapons.length; i++)
+            weapons[i].disabled = false; 
+    }
+    else{
+        for(var i = 0 ;i < weapons.length; i++)
+            weapons[i].disabled = true; 
+    }
+
+     checkButtonStatus();
+}
+
+function togglePowerupsCheck(){
+    ammoRandomized= !ammoRandomized;
+
+    var powerups =  document.getElementsByClassName("powerup-item");
+    if(ammoRandomized){
+        for(var i = 0 ;i < powerups.length; i++)
+            powerups[i].disabled = false; 
+    }
+    else{
+        for(var i = 0 ;i < powerups.length; i++)
+            powerups[i].disabled = true; 
+    }
+
+     checkButtonStatus();
+}
+
+function toggleAmmoCheck(){
+    ammoRandomized= !ammoRandomized;
+
+    var ammo =  document.getElementsByClassName("ammo-item");
+    if(ammoRandomized){
+        for(var i = 0 ;i < ammo.length; i++)
+            ammo[i].disabled = false; 
+    }
+    else{
+        for(var i = 0 ;i < ammo.length; i++)
+            ammo[i].disabled = true; 
+    }
+
+     checkButtonStatus();
 }
 
 function startRandomize(){
@@ -81,13 +147,15 @@ function startRandomize(){
     var powerupsRandomized = document.getElementById("powerups").checked;
     var ammoRandomized = document.getElementById("ammo").checked;
 
-    var difficulty;
-    if(document.getElementById("easy").checked)
-        difficulty = 0;
-    else if (document.getElementById("medium").checked)
-        difficulty = 1;
-    else
-        difficulty = 2;
+    // var difficulty;
+    // if(document.getElementById("easy").checked)
+    //     difficulty = 0;
+    // else if (document.getElementById("medium").checked)
+    //     difficulty = 1;
+    // else
+    //     difficulty = 2;
+
+    var difficulty = 1;
 
     if(seed === undefined){
         seed = Math.floor(Math.random() * (2147483647 - -2147483648)) + 2147483647;

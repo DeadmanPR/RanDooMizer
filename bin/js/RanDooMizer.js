@@ -15,6 +15,7 @@ var enemiesRandomized;
 var weaponsRandomized;
 var powerupRandomized;
 var ammoRandomized;
+var randomizerSeed;
 
 
  
@@ -30,6 +31,8 @@ Math.seededRandom = function(max, min) {
 
 function randomize(wad, doomVersion, diff, enemiesRandom, weaponsRandom, powerupRandom, ammoRandom, seed){
     Math.seed = seed;
+	randomizerSeed = seed;
+
     var positionInFile = 4;
 
 	var wadFile = new Uint8Array(wad);// new Array();
@@ -37,7 +40,6 @@ function randomize(wad, doomVersion, diff, enemiesRandom, weaponsRandom, powerup
 	//	wadFile.push(wad[x]);
 	//}
 
-	console.log(wadFile);
 	
     this.doomGame = doomVersion;
     this.difficulty = diff;
@@ -122,8 +124,8 @@ function randomize(wad, doomVersion, diff, enemiesRandom, weaponsRandom, powerup
 					var tid = new Array();
                     tid.push(wadFile[positionInFile++]);
 					tid.push(wadFile[positionInFile++]);
-					tid.push(String.fromCharCode(0));
-					tid.push(String.fromCharCode(0));
+					tid.push(0);
+					tid.push(0);
 			
         
 					//Get the TID in decimal format and randomize it
@@ -144,7 +146,7 @@ function randomize(wad, doomVersion, diff, enemiesRandom, weaponsRandom, powerup
 		                wadFile[positionInFile++] = byteArr[1];
 
 						//Restore the previous offset
-						//positionInFile = offsetBackup;
+						positionInFile = offsetBackup;
 					}
 
 					positionInFile += 2;
@@ -165,9 +167,16 @@ function randomize(wad, doomVersion, diff, enemiesRandom, weaponsRandom, powerup
     	var blob = new Blob([wad]);
     	var link = document.createElement('a');
     	link.href = window.URL.createObjectURL(blob);
-    	var fileName = 'test' + ".wad";
+		var fileName;
+		if(doomGame == 1)
+    		fileName = 'Doom_' + randomizerSeed + ".wad";
+		else if(doomGame == 2)
+			fileName = 'Doom2_' + randomizerSeed + ".wad";
     	link.download = fileName;
     	link.click();
+		document.getElementById("page").style.opacity = 1;
+   		document.getElementById("loading-spinner").style.display = 'none';
+   		document.getElementById("loading-spinner-text").style.display = 'none';
 
 }
 
@@ -285,7 +294,7 @@ function randomizeThing(tid, levelNumber){
 					return tid;
 
 				var randomTID = Math.seededRandom(0,99);
-				if(Math.seed == 666)
+				if(randomizerSeed == 666)
 					return 16;	//Hehe... 
 
 				if(doomGame == 1){		//Doom

@@ -24,8 +24,8 @@
     </head>
 
     <body>
-    <div id="page" style="min-width: 960px; margin: 0 auto;">
-       <div id="panel" class="img-rounded">
+    <div id="page" style="min-width: 1400px; margin: 0 auto;">
+       <div id="panel">
            <h1 style="text-align:center">RanDooMizer</h1>
            <br>
 
@@ -34,15 +34,97 @@
 
            <br>
 
-           <div id="options" style="display:none;">
+           <div id="options">
            <table class="table">
                <tr> 
                    <td style="max-width: 250px;">           
-                        <p class="optionsText">1) Select which things will be randomized.</p>
-                        <div class="checkbox">
-                            <label><input id="enemies" type="checkbox" name="Enemies" value="enemies" onchange="checkButtonStatus()"> <p style="display:inline;">Enemies</p></label> <br>
+                        <h2>What will be randomized?</h2>
+                        <div class="enemies-area col-xs-3">
+                            <table class="table">
+                            <tr>
+                                <label><input id="enemies" type="checkbox" name="Enemies" value="enemies" onchange="toggleEnemiesCheck()"> <h3 style="display:inline;">Enemies</h3></label> <br>
+                            </tr>
+                                <tr>
+                                    <ul class="list-group">
+                                         <li class="list-group-item"><h4 style="display:inline">Enemy</h4><h4 style="display:inline; position:absolute; top:0%; left:70%">Probability</h4></li>
+                                         <li class="list-group-item"><p style="display:inline">Baron of Hell</p><input class="list-item-input enemy-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Cacodemon</p><input class="list-item-input enemy-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Cyberdemon</p><input class="list-item-input enemy-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Former Human (Pistol)</p><input class="list-item-input enemy-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Former Human (Shotgun)</p><input class="list-item-input enemy-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Imp</p><input class="list-item-input enemy-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Lost Soul</p><input class="list-item-input enemy-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Pinky</p><input class="list-item-input enemy-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Spectre</p><input class="list-item-input enemy-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Spider Mastermind</p><input class="list-item-input enemy-item" type="number" disabled/></li>
+                                        
+                                         
+                                    </ul>
+                                </tr>
+                            </table>
                         </div>
-                        <div class="checkbox">
+
+                         <div class="weapons-area col-xs-3">
+                            <table class="table">
+                            <tr>
+                                <label><input id="weapons" type="checkbox" name="Weapons" value="weapons" onchange="toggleWeaponsCheck()"> <h3 style="display:inline;">Weapons</h3></label> <br>
+                            </tr>
+                                <tr>
+                                    <ul class="list-group">
+                                         <li class="list-group-item"><h4 style="display:inline">Weapon</h4><h4 style="display:inline; position:absolute; top:0%; left:70%">Probability</h4></li>
+                                         <li class="list-group-item"><p style="display:inline">BFG9000</p><input class="list-item-input weapon-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Chaingun</p><input class="list-item-input weapon-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Chainsaw</p><input class="list-item-input weapon-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Plasma Rifle</p><input class="list-item-input weapon-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Rocket Launcher</p><input class="list-item-input weapon-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Shotgun</p><input class="list-item-input weapon-item" type="number" disabled/></li>
+                                    </ul>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="powerup-area col-xs-3">
+                            <table class="table">
+                            <tr>
+                                <label><input id="powerups" type="checkbox" name="Powerups" value="powerups" onchange="togglePowerupsCheck()"> <h3 style="display:inline;">Powerups</h3></label> <br>
+                            </tr>
+                                <tr>
+                                    <ul class="list-group">
+                                         <li class="list-group-item"><h4 style="display:inline">Powerup</h4><h4 style="display:inline; position:absolute; top:0%; left:70%">Probability</h4></li>
+                                         <li class="list-group-item"><p style="display:inline">Backpack</p><input class="list-item-input powerup-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Blue Armor</p><input class="list-item-input powerup-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Green Armor</p><input class="list-item-input powerup-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Medikit</p><input class="list-item-input powerup-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Radiation Suit</p><input class="list-item-input powerup-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Stimpack</p><input class="list-item-input powerup-item" type="number" disabled/></li>
+                                    </ul>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="ammo-area col-xs-3">
+                            <table class="table">
+                            <tr>
+                                <label><input id="ammo" type="checkbox" name="Ammo" value="ammo" onchange="toggleAmmoCheck()"> <h3 style="display:inline;">Ammo</h3></label> <br>
+                            </tr>
+                                <tr>
+                                    <ul class="list-group">
+                                         <li class="list-group-item"><h4 style="display:inline">Ammo</h4><h4 style="display:inline; position:absolute; top:0%; left:70%">Probability</h4></li>
+                                         <li class="list-group-item"><p style="display:inline">Ammo Clip</p><input class="list-item-input ammo-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Box of Ammo</p><input class="list-item-input ammo-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Box of Rockets</p><input class="list-item-input ammo-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Box of Shells</p><input class="list-item-input ammo-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Cell Charge</p><input class="list-item-input ammo-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Cell charge pack</p><input class="list-item-input ammo-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Rocket</p><input class="list-item-input ammo-item" type="number" disabled/></li>
+                                         <li class="list-group-item"><p style="display:inline">Shotgun Shells</p><input class="list-item-input ammo-item" type="number" disabled/></li>
+                                    </ul>
+                                </tr>
+                            </table>
+                        </div>
+
+                        
+                        <!--div class="checkbox">
                             <label><input id="weapons" type="checkbox" name="Weapons" value="weapons" onchange="checkButtonStatus()"> <p style="display:inline;">Weapons</p></label> <br>
                         </div>
                         <div class="checkbox">
@@ -50,10 +132,10 @@
                         </div>
                         <div class="checkbox">
                             <label><input id="ammo" type="checkbox" name="Ammo" value="ammo" onchange="checkButtonStatus()"> <p style="display:inline;">Ammunition</p></label> <br>
-                        </div>
+                        </div>-->
                    </td>
                    <td>
-                    <p class="optionsText">2) Select the difficulty.</p>
+                    <!--<p class="optionsText">2) Select the difficulty.</p>
                     <div class="radio">
                             <label><input id="easy" type="radio" name="optradio" value="easy" onchange="checkButtonStatus()"> <p style="display:inline;">Easy</p></label> <br>
                     </div>
@@ -62,12 +144,12 @@
                     </div>
                     <div class="radio">
                             <label><input id="hard" type="radio" name="optradio" value="hard" onchange="checkButtonStatus()"> <p style="display:inline;">Hard</p></label> <br>
-                    </div>
+                    </div>-->
                    </td>
                </tr>
            </table>
 
-           <button id="randomize-button" class="btn" style="display:block; margin:auto; width:30%; height:40px; background-color:#58ae39; color:white;" disabled onclick="startRandomize()">RanDooMize!</button>
+           <button id="randomize-button" class="btn" style="display:block; margin:auto; width:15%; height:40px; background-color:#58ae39; color:white;" disabled onclick="startRandomize()"><i class="fa fa-magic" style="padding-right: 10px;"></i>RanDooMize!</button>
 
            <br>
            </div>
