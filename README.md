@@ -3,7 +3,7 @@ Coded by: José Antonio Rodríguez Rivera
 This program was made in Java. Therefore, you must have Java installed on your computer in order for this to work.
 
 # Brief Overview
-This program made in Java will randomize certain aspects of the video game Doom and its sequel, Doom II: Hell on Earth. Enemies, weapons, powerups and ammunition can all be randomized, with a random seed or a given seed. 
+This program/website will randomize certain aspects of the video game Doom and its sequel, Doom II: Hell on Earth. Enemies, weapons, powerups and ammunition can all be randomized, with a random seed or a given seed. 
 
 # Seeds
 If the seed is given to the program, it will ensure that you always get the same random pattern (in other words, if 2 users use the same seed, they will get the exact same item locations and enemies).
