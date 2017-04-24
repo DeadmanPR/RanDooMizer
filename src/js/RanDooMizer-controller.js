@@ -16,6 +16,13 @@ function fileSelected(){
         if(doomVersion !== undefined)
             $("#seedConfirmation").modal();
         document.getElementById("file-upload").disabled = true;
+        document.getElementById("enemies").disabled = false;
+        document.getElementById("weapons").disabled = false;
+        //document.getElementById("powerups").disabled = false;
+        document.getElementById("ammo").disabled = false; 
+        document.getElementById("easy").disabled = false;
+        document.getElementById("medium").disabled = false;
+        document.getElementById("hard").disabled = false;
     
     }
 
@@ -67,7 +74,8 @@ function setDoomVersion(version){
 
 function checkButtonStatus(){
     if((document.getElementById("enemies").checked || document.getElementById("weapons").checked ||
-        document.getElementById("powerups").checked || document.getElementById("ammo").checked))
+        document.getElementById("powerups").checked || document.getElementById("ammo").checked) && 
+        (document.getElementById("easy").checked || document.getElementById("medium").checked || document.getElementById("hard").checked))
             document.getElementById("randomize-button").disabled = false;
 
     else

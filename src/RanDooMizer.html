@@ -36,7 +36,7 @@
 
            <div id="options">
            <table class="table">
-               <tr> 
+              <!-- <tr> 
                    <td style="max-width: 250px;">           
                         <h2>What will be randomized?</h2>
                         <div class="enemies-area col-xs-3">
@@ -121,30 +121,34 @@
                                     </ul>
                                 </tr>
                             </table>
-                        </div>
-
-                        
-                        <!--div class="checkbox">
-                            <label><input id="weapons" type="checkbox" name="Weapons" value="weapons" onchange="checkButtonStatus()"> <p style="display:inline;">Weapons</p></label> <br>
-                        </div>
-                        <div class="checkbox">
-                            <label><input id="powerups" type="checkbox" name="Powerups" value="powerups" onchange="checkButtonStatus()"> <p style="display:inline;">Chance of getting weapons in place of powerups (10% chance that a powerup is changed to a weapon)</p></label> <br> 
-                        </div>
-                        <div class="checkbox">
-                            <label><input id="ammo" type="checkbox" name="Ammo" value="ammo" onchange="checkButtonStatus()"> <p style="display:inline;">Ammunition</p></label> <br>
                         </div>-->
+
+                        <td>
+                            <p class="optionsText">1) What will be randomized?</p>
+                            <div class="checkbox">
+                                <label><input id="enemies" type="checkbox" name="Enemies" value="enemies" onchange="checkButtonStatus()" disabled> <p style="display:inline;">Enemies</p></label> <br>
+                            </div>
+                            <div class="checkbox">
+                                <label><input id="weapons" type="checkbox" name="Weapons" value="weapons" onchange="checkButtonStatus()" disabled> <p style="display:inline;">Weapons</p></label> <br>
+                            </div>
+                            <div class="checkbox">
+                                <label><input id="powerups" type="checkbox" name="Powerups" value="powerups" onchange="checkButtonStatus()" disabled> <p style="display:inline;">Powerups</p></label> <br> 
+                            </div>
+                            <div class="checkbox">
+                                <label><input id="ammo" type="checkbox" name="Ammo" value="ammo" onchange="checkButtonStatus()" disabled> <p style="display:inline;">Ammunition</p></label> <br>
+                            </div>
                    </td>
                    <td>
-                    <!--<p class="optionsText">2) Select the difficulty.</p>
+                    <p class="optionsText">2) Select the difficulty.</p>
                     <div class="radio">
-                            <label><input id="easy" type="radio" name="optradio" value="easy" onchange="checkButtonStatus()"> <p style="display:inline;">Easy</p></label> <br>
+                            <label><input id="easy" type="radio" name="optradio" value="easy" onchange="checkButtonStatus()" disabled> <p style="display:inline;">Easy</p></label> <br>
                     </div>
                     <div class="radio">
-                            <label><input id="medium" type="radio" name="optradio" value="medium" onchange="checkButtonStatus()"> <p style="display:inline;">Medium</p></label> <br>
+                            <label><input id="medium" type="radio" name="optradio" value="medium" onchange="checkButtonStatus()" disabled> <p style="display:inline;">Medium</p></label> <br>
                     </div>
                     <div class="radio">
-                            <label><input id="hard" type="radio" name="optradio" value="hard" onchange="checkButtonStatus()"> <p style="display:inline;">Hard</p></label> <br>
-                    </div>-->
+                            <label><input id="hard" type="radio" name="optradio" value="hard" onchange="checkButtonStatus()" disabled> <p style="display:inline;">Hard</p></label> <br>
+                    </div>
                    </td>
                </tr>
            </table>

@@ -234,7 +234,7 @@ function initializeDoomLists(){
 	powerupsTID.push(2019);	//Blue Armor
 	powerupsTID.push(2018);	//Green Armor
 	powerupsTID.push(2012);	//Medikit
-	powerupsTID.push(2025);	//Radiation Suit
+	//powerupsTID.push(2025);	//Radiation Suit
 	powerupsTID.push(2011);	//Stimpack
 	//powerupsTID.push(2023);	//Berserk
 	powerupsTID.push(2014);	//Health Potion
@@ -479,8 +479,8 @@ function randomizeThing(tid, levelNumber){
 			else{
 
 				var randomTID = Math.seededRandom(0,99);
-				if(randomTID >= 0 && randomTID <= 90)
-					return tid;
+				if(randomTID >= 0 && randomTID < 90)
+					return powerupsTID[randomTID % powerupsTID.length];
 				else
 					return weaponsTID[(randomTID % weaponsTID.length)];	//10% chance of getting a weapon in place of a powerup, done for balancing purposes
 			}
